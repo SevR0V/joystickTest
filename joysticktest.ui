@@ -28,30 +28,6 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Secondary Device:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="secondaryDeviceList">
-        <property name="minimumSize">
-         <size>
-          <width>370</width>
-          <height>0</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
      <layout class="QHBoxLayout" name="horizontalLayout_23">
       <item>
        <widget class="QLabel" name="label">
@@ -65,6 +41,30 @@
       </item>
       <item>
        <widget class="QComboBox" name="primaryDeviceList">
+        <property name="minimumSize">
+         <size>
+          <width>370</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Secondary Device:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="secondaryDeviceList">
         <property name="minimumSize">
          <size>
           <width>370</width>
@@ -107,8 +107,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>481</width>
-         <height>1220</height>
+         <width>488</width>
+         <height>1052</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_36">
@@ -1047,6 +1047,9 @@
                 <property name="cursor">
                  <cursorShape>ArrowCursor</cursorShape>
                 </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+                </property>
                 <property name="readOnly">
                  <bool>true</bool>
                 </property>
@@ -1056,6 +1059,9 @@
                <widget class="QLineEdit" name="secondaryStereoframeBut">
                 <property name="cursor">
                  <cursorShape>ArrowCursor</cursorShape>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
                 </property>
                 <property name="readOnly">
                  <bool>true</bool>
@@ -1093,6 +1099,9 @@
                 <property name="cursor">
                  <cursorShape>ArrowCursor</cursorShape>
                 </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+                </property>
                 <property name="readOnly">
                  <bool>true</bool>
                 </property>
@@ -1102,6 +1111,9 @@
                <widget class="QLineEdit" name="secondaryForwardBut">
                 <property name="cursor">
                  <cursorShape>ArrowCursor</cursorShape>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
                 </property>
                 <property name="readOnly">
                  <bool>true</bool>
@@ -1139,6 +1151,9 @@
                 <property name="cursor">
                  <cursorShape>ArrowCursor</cursorShape>
                 </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+                </property>
                 <property name="readOnly">
                  <bool>true</bool>
                 </property>
@@ -1148,6 +1163,9 @@
                <widget class="QLineEdit" name="secondaryBackwardsBut">
                 <property name="cursor">
                  <cursorShape>ArrowCursor</cursorShape>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
                 </property>
                 <property name="readOnly">
                  <bool>true</bool>
@@ -1185,6 +1203,9 @@
                 <property name="cursor">
                  <cursorShape>ArrowCursor</cursorShape>
                 </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+                </property>
                 <property name="readOnly">
                  <bool>true</bool>
                 </property>
@@ -1194,6 +1215,9 @@
                <widget class="QLineEdit" name="secondaryLeftBut">
                 <property name="cursor">
                  <cursorShape>ArrowCursor</cursorShape>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
                 </property>
                 <property name="readOnly">
                  <bool>true</bool>
@@ -1231,6 +1255,9 @@
                 <property name="cursor">
                  <cursorShape>ArrowCursor</cursorShape>
                 </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+                </property>
                 <property name="readOnly">
                  <bool>true</bool>
                 </property>
@@ -1240,6 +1267,9 @@
                <widget class="QLineEdit" name="secondaryRightBut">
                 <property name="cursor">
                  <cursorShape>ArrowCursor</cursorShape>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
                 </property>
                 <property name="readOnly">
                  <bool>true</bool>
@@ -1277,6 +1307,9 @@
                 <property name="cursor">
                  <cursorShape>ArrowCursor</cursorShape>
                 </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+                </property>
                 <property name="readOnly">
                  <bool>true</bool>
                 </property>
@@ -1286,6 +1319,9 @@
                <widget class="QLineEdit" name="secondaryRotLeftBut">
                 <property name="cursor">
                  <cursorShape>ArrowCursor</cursorShape>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
                 </property>
                 <property name="readOnly">
                  <bool>true</bool>
@@ -1323,6 +1359,9 @@
                 <property name="cursor">
                  <cursorShape>ArrowCursor</cursorShape>
                 </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+                </property>
                 <property name="readOnly">
                  <bool>true</bool>
                 </property>
@@ -1332,6 +1371,9 @@
                <widget class="QLineEdit" name="secondaryRotRightBut">
                 <property name="cursor">
                  <cursorShape>ArrowCursor</cursorShape>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
                 </property>
                 <property name="readOnly">
                  <bool>true</bool>
@@ -1369,6 +1411,9 @@
                 <property name="cursor">
                  <cursorShape>ArrowCursor</cursorShape>
                 </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+                </property>
                 <property name="readOnly">
                  <bool>true</bool>
                 </property>
@@ -1378,6 +1423,9 @@
                <widget class="QLineEdit" name="secondaryDownBut">
                 <property name="cursor">
                  <cursorShape>ArrowCursor</cursorShape>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
                 </property>
                 <property name="readOnly">
                  <bool>true</bool>
@@ -1415,6 +1463,9 @@
                 <property name="cursor">
                  <cursorShape>ArrowCursor</cursorShape>
                 </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+                </property>
                 <property name="readOnly">
                  <bool>true</bool>
                 </property>
@@ -1424,6 +1475,9 @@
                <widget class="QLineEdit" name="secondaryUpBut">
                 <property name="cursor">
                  <cursorShape>ArrowCursor</cursorShape>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
                 </property>
                 <property name="readOnly">
                  <bool>true</bool>
@@ -1461,6 +1515,9 @@
                 <property name="cursor">
                  <cursorShape>ArrowCursor</cursorShape>
                 </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+                </property>
                 <property name="readOnly">
                  <bool>true</bool>
                 </property>
@@ -1470,6 +1527,9 @@
                <widget class="QLineEdit" name="secondaryRollInc">
                 <property name="cursor">
                  <cursorShape>ArrowCursor</cursorShape>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
                 </property>
                 <property name="readOnly">
                  <bool>true</bool>
@@ -2144,12 +2204,9 @@
     </item>
    </layout>
    <zorder>scrollArea</zorder>
-   <zorder>layoutWidget</zorder>
-   <zorder>verticalScrollBar</zorder>
-   <zorder></zorder>
-   <zorder></zorder>
    <zorder></zorder>
    <zorder>inputProgressBar</zorder>
+   <zorder></zorder>
   </widget>
  </widget>
  <resources/>

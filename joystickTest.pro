@@ -10,11 +10,13 @@ CONFIG += c++17
 
 SOURCES += \
     customlineedit.cpp \
+    gamepadworker.cpp \
     main.cpp \
     joysticktest.cpp
 
 HEADERS += \
     customlineedit.h \
+    gamepadworker.h \
     joysticktest.h
 
 FORMS += \
@@ -24,3 +26,14 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+unix|win32: LIBS += -L$$PWD/SDL3/lib/x64/ -lSDL3
+
+INCLUDEPATH += $$PWD/SDL3/include
+DEPENDPATH += $$PWD/SDL3/include
+
+CONFIG(release, debug|release) {
+    QMAKE_POST_LINK += $$quote(C:/Qt/6.8.2/msvc2022_64/bin/windeployqt6.exe $$OUT_PWD/release/$${TARGET}.exe)
+} else {
+    QMAKE_POST_LINK += $$quote(C:/Qt/6.8.2/msvc2022_64/bin/windeployqt6.exe $$OUT_PWD/debug/$${TARGET}.exe)
+}
