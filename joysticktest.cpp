@@ -38,7 +38,7 @@ JoystickTest::JoystickTest(QWidget *parent)
     connect(worker, &GamepadWorker::secondaryButtonPressed, this, &JoystickTest::onSecondaryButtonPressed);
     connect(worker, &GamepadWorker::secondaryAxisMoved, this, &JoystickTest::onSecondaryAxisMoved);
     connect(worker, &GamepadWorker::deviceListUpdated, this, &JoystickTest::updateDeviceList);
-    connect(this, &JoystickTest::destroyed, worker, &GamepadWorker::stop); // Новый сигнал для остановки
+    connect(this, &JoystickTest::destroyed, worker, &GamepadWorker::stop);
     connect(workerThread, &QThread::finished, worker, &GamepadWorker::deleteLater);
 
     workerThread->start();

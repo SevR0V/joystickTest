@@ -6,7 +6,7 @@ const QString GamepadWorker::NO_DEVICE_NAME = "No Device";
 
 GamepadWorker::GamepadWorker(QObject *parent) : QObject(parent)
 {
-    if (!SDL_Init(SDL_INIT_GAMEPAD)) {
+    if (SDL_Init(SDL_INIT_JOYSTICK) < 0) {
         qDebug() << "SDL3 Init failed in worker:" << SDL_GetError();
         return;
     }
@@ -22,8 +22,8 @@ GamepadWorker::GamepadWorker(QObject *parent) : QObject(parent)
 
 GamepadWorker::~GamepadWorker()
 {
-    for (SDL_Gamepad *gamepad : gamepads.values()) {
-        if (gamepad) SDL_CloseGamepad(gamepad);
+    for (SDL_Joystick *joystick : joysticks.values()) {
+        if (joystick) SDL_CloseJoystick(joystick);
     }
     SDL_Quit();
 }
@@ -31,17 +31,17 @@ GamepadWorker::~GamepadWorker()
 void GamepadWorker::setPrimaryDevice(const QString &deviceName)
 {
     if (deviceName != NO_DEVICE_NAME) {
-        deactivateGamepad(primaryGamepad);
-        primaryGamepad = gamepads.value(deviceName, nullptr);
-        if (primaryGamepad) {
-            qDebug() << "Primary Gamepad opened:" << deviceName;
+        deactivateJoystick(primaryJoystick);
+        primaryJoystick = joysticks.value(deviceName, nullptr);
+        if (primaryJoystick) {
+            qDebug() << "Primary Joystick opened:" << deviceName;
             currentPrimaryName = deviceName;
         } else {
-            qDebug() << "Failed to set Primary Gamepad:" << deviceName << "not found";
+            qDebug() << "Failed to set Primary Joystick:" << deviceName << "not found";
             currentPrimaryName = NO_DEVICE_NAME;
         }
     } else {
-        deactivateGamepad(primaryGamepad);
+        deactivateJoystick(primaryJoystick);
         currentPrimaryName = NO_DEVICE_NAME;
     }
 }
@@ -49,17 +49,17 @@ void GamepadWorker::setPrimaryDevice(const QString &deviceName)
 void GamepadWorker::setSecondaryDevice(const QString &deviceName)
 {
     if (deviceName != NO_DEVICE_NAME) {
-        deactivateGamepad(secondaryGamepad);
-        secondaryGamepad = gamepads.value(deviceName, nullptr);
-        if (secondaryGamepad) {
-            qDebug() << "Secondary Gamepad opened:" << deviceName;
+        deactivateJoystick(secondaryJoystick);
+        secondaryJoystick = joysticks.value(deviceName, nullptr);
+        if (secondaryJoystick) {
+            qDebug() << "Secondary Joystick opened:" << deviceName;
             currentSecondaryName = deviceName;
         } else {
-            qDebug() << "Failed to set Secondary Gamepad:" << deviceName << "not found";
+            qDebug() << "Failed to set Secondary Joystick:" << deviceName << "not found";
             currentSecondaryName = NO_DEVICE_NAME;
         }
     } else {
-        deactivateGamepad(secondaryGamepad);
+        deactivateJoystick(secondaryJoystick);
         currentSecondaryName = NO_DEVICE_NAME;
     }
 }
@@ -75,36 +75,36 @@ void GamepadWorker::pollDevices()
 {
     if (!running) return;
 
-    SDL_UpdateGamepads();
+    SDL_UpdateJoysticks(); // Обновляем состояние всех джойстиков
 
-    int numGamepads = 0;
-    SDL_GetGamepads(&numGamepads);
-    if (numGamepads != lastNumGamepads) {
+    int numJoysticks = 0;
+    SDL_GetJoysticks(&numJoysticks);
+    if (numJoysticks != lastNumJoysticks) {
         updateDeviceList();
     }
 
-    if (primaryGamepad) {
-        for (int i = 0; i < SDL_GAMEPAD_BUTTON_COUNT; ++i) {
-            if (SDL_GetGamepadButton(primaryGamepad, static_cast<SDL_GamepadButton>(i))) {
+    if (primaryJoystick) {
+        for (int i = 0; i < SDL_GetNumJoystickButtons(primaryJoystick); ++i) {
+            if (SDL_GetJoystickButton(primaryJoystick, i)) {
                 emit primaryButtonPressed(i);
             }
         }
-        for (int i = 0; i < SDL_GAMEPAD_AXIS_COUNT; ++i) {
-            Sint16 axisValue = SDL_GetGamepadAxis(primaryGamepad, static_cast<SDL_GamepadAxis>(i));
+        for (int i = 0; i < SDL_GetNumJoystickAxes(primaryJoystick); ++i) {
+            Sint16 axisValue = SDL_GetJoystickAxis(primaryJoystick, i);
             if (abs(axisValue) > 1000) {
                 emit primaryAxisMoved(i, axisValue);
             }
         }
     }
 
-    if (secondaryGamepad) {
-        for (int i = 0; i < SDL_GAMEPAD_BUTTON_COUNT; ++i) {
-            if (SDL_GetGamepadButton(secondaryGamepad, static_cast<SDL_GamepadButton>(i))) {
+    if (secondaryJoystick) {
+        for (int i = 0; i < SDL_GetNumJoystickButtons(secondaryJoystick); ++i) {
+            if (SDL_GetJoystickButton(secondaryJoystick, i)) {
                 emit secondaryButtonPressed(i);
             }
         }
-        for (int i = 0; i < SDL_GAMEPAD_AXIS_COUNT; ++i) {
-            Sint16 axisValue = SDL_GetGamepadAxis(secondaryGamepad, static_cast<SDL_GamepadAxis>(i));
+        for (int i = 0; i < SDL_GetNumJoystickAxes(secondaryJoystick); ++i) {
+            Sint16 axisValue = SDL_GetJoystickAxis(secondaryJoystick, i);
             if (abs(axisValue) > 1000) {
                 emit secondaryAxisMoved(i, axisValue);
             }
@@ -114,65 +114,65 @@ void GamepadWorker::pollDevices()
 
 void GamepadWorker::updateDeviceList()
 {
-    int numGamepads = 0;
-    SDL_JoystickID *gamepadIds = SDL_GetGamepads(&numGamepads);
-    if (numGamepads == lastNumGamepads && !deviceListChanged) {
-        SDL_free(gamepadIds);
+    int numJoysticks = 0;
+    SDL_JoystickID *joystickIds = SDL_GetJoysticks(&numJoysticks);
+    if (numJoysticks == lastNumJoysticks && !deviceListChanged) {
+        SDL_free(joystickIds);
         return;
     }
 
-    lastNumGamepads = numGamepads;
+    lastNumJoysticks = numJoysticks;
     deviceListChanged = true;
 
-    QMap<QString, SDL_Gamepad*> newGamepads;
-    for (const QString &name : gamepads.keys()) {
+    QMap<QString, SDL_Joystick*> newJoysticks;
+    for (const QString &name : joysticks.keys()) {
         if (name != currentPrimaryName && name != currentSecondaryName) {
-            SDL_Gamepad *gamepad = gamepads[name];
-            if (gamepad) SDL_CloseGamepad(gamepad);
+            SDL_Joystick *joystick = joysticks[name];
+            if (joystick) SDL_CloseJoystick(joystick);
         } else {
-            newGamepads[name] = gamepads[name];
+            newJoysticks[name] = joysticks[name];
         }
     }
-    gamepads = newGamepads;
+    joysticks = newJoysticks;
 
     QStringList deviceNames;
     deviceNames << NO_DEVICE_NAME;
 
-    if (gamepadIds && numGamepads > 0) {
-        for (int i = 0; i < numGamepads; ++i) {
-            SDL_Gamepad *tempGamepad = SDL_OpenGamepad(gamepadIds[i]);
-            if (tempGamepad) {
-                const char *name = SDL_GetGamepadName(tempGamepad);
-                QString deviceName = name ? name : QString("Gamepad %1").arg(gamepadIds[i]);
-                if (!gamepads.contains(deviceName)) {
-                    gamepads[deviceName] = tempGamepad;
+    if (joystickIds && numJoysticks > 0) {
+        for (int i = 0; i < numJoysticks; ++i) {
+            SDL_Joystick *tempJoystick = SDL_OpenJoystick(joystickIds[i]);
+            if (tempJoystick) {
+                const char *name = SDL_GetJoystickName(tempJoystick);
+                QString deviceName = name ? name : QString("Joystick %1").arg(joystickIds[i]);
+                if (!joysticks.contains(deviceName)) {
+                    joysticks[deviceName] = tempJoystick;
                 } else {
-                    SDL_CloseGamepad(tempGamepad);
+                    SDL_CloseJoystick(tempJoystick);
                 }
                 deviceNames << deviceName;
             }
         }
-        SDL_free(gamepadIds);
+        SDL_free(joystickIds);
     }
 
     emit deviceListUpdated(deviceNames);
 }
 
-void GamepadWorker::deactivateGamepad(SDL_Gamepad *&gamepad)
+void GamepadWorker::deactivateJoystick(SDL_Joystick *&joystick)
 {
-    if (gamepad) {
+    if (joystick) {
         QString nameToRemove;
-        for (const QString &name : gamepads.keys()) {
-            if (gamepads[name] == gamepad && name != currentPrimaryName && name != currentSecondaryName) {
+        for (const QString &name : joysticks.keys()) {
+            if (joysticks[name] == joystick && name != currentPrimaryName && name != currentSecondaryName) {
                 nameToRemove = name;
                 break;
             }
         }
         if (!nameToRemove.isEmpty()) {
-            gamepads.remove(nameToRemove);
-            SDL_CloseGamepad(gamepad);
+            joysticks.remove(nameToRemove);
+            SDL_CloseJoystick(joystick);
         }
-        gamepad = nullptr;
-        qDebug() << "Gamepad deactivated";
+        joystick = nullptr;
+        qDebug() << "Joystick deactivated";
     }
 }

@@ -20,7 +20,7 @@ public:
     void resetDeviceListChanged() { deviceListChanged = false; }
 
 public slots:
-    void stop(); // Сделали публичным слотом
+    void stop();
 
 signals:
     void primaryButtonPressed(int button);
@@ -30,17 +30,17 @@ signals:
     void deviceListUpdated(const QStringList &deviceNames);
 
 private:
-    void deactivateGamepad(SDL_Gamepad *&gamepad);
+    void deactivateJoystick(SDL_Joystick *&joystick);
 
-    SDL_Gamepad *primaryGamepad = nullptr;
-    SDL_Gamepad *secondaryGamepad = nullptr;
+    SDL_Joystick *primaryJoystick = nullptr;
+    SDL_Joystick *secondaryJoystick = nullptr;
     QString currentPrimaryName;
     QString currentSecondaryName;
-    int lastNumGamepads = -1;
+    int lastNumJoysticks = -1;
     bool deviceListChanged = false;
     QTimer *timer;
     bool running = true;
-    QMap<QString, SDL_Gamepad*> gamepads;
+    QMap<QString, SDL_Joystick*> joysticks;
 
     static const QString NO_DEVICE_NAME;
 };
